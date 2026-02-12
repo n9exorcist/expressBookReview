@@ -10,13 +10,17 @@ public_users.get("/", function (req, res) {
   });
 });
 
-// Task 11 refinement for general.js
+// Task 11 (ISBN) - Using Promises
 public_users.get("/isbn/:isbn", function (req, res) {
   const isbn = req.params.isbn;
-  new Promise((resolve, reject) => {
-    if (books[isbn]) resolve(books[isbn]);
-    else reject({ status: 404, message: "ISBN not found" });
-  })
+  const getBook = new Promise((resolve, reject) => {
+    if (books[isbn]) {
+      resolve(books[isbn]);
+    } else {
+      reject({ status: 404, message: "Book not found" });
+    }
+  });
+  getBook
     .then((book) => res.status(200).json(book))
     .catch((err) => res.status(err.status).json({ message: err.message }));
 });
